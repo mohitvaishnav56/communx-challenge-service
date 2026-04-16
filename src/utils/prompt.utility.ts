@@ -10,6 +10,7 @@ SCHEMA:
   "duration": { "min": integer, "max": integer },
   "primary_skill": string,
   "secondary_skills": [string, string],
+  "scenario": string,
   "example_prompt": string,
   "difficulty": string,
   "tags": [string],
@@ -22,6 +23,7 @@ CONSTRAINTS:
 - duration.min / duration.max: Integers in seconds; min ≥ 60
 - primary_skill: Exactly one from → Clarity, Tone, Pace, Pronunciation, Emotion, Fluency, Communication Style
 - secondary_skills: Exactly 2 from the same list, different from primary_skill
+- scenario: One paragraph describing a specific real-world workplace situation
 - example_prompt: One sentence to help the user begin speaking
 - difficulty: Exactly one of → beginner, intermediate, advanced
 - tags: 2–3 lowercase keywords
