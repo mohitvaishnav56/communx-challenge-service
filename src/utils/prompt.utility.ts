@@ -32,7 +32,7 @@ CONSTRAINTS:
     • Each value float between 0.0 and 1.0
     • Must sum to EXACTLY 1.0
 `;
-
+  
 const WRITING_SCHEMA_AND_CONSTRAINTS = `
 SCHEMA:
 {

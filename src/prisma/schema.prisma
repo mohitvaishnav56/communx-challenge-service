@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URI")
+}
+
+enum ChallengeType {
+  voice
+  writing
+}
+
+enum Difficulty {
+  beginner
+  intermediate
+  advanced
+}
+
+enum EvaluationMode {
+  ai
+  host
+  hybrid
+}
+
+model Challenge {
+  id              String           @id @default(uuid())
+  title           String
+  description     String
+  type            ChallengeType
+  difficulty      Difficulty
+  createdBy       String?          // userId or "system"
+  isAiGenerated   Boolean          @default(false)
+  visibility      String           @default("public")
+  evaluationMode  EvaluationMode   @default(ai)
+  deadline        DateTime?
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  voiceConfig     VoiceChallengeConfig?
+  writingConfig   WritingChallengeConfig?
+}
+
+model VoiceChallengeConfig {
+  id                String   @id @default(uuid())
+  challengeId       String   @unique
+
+  durationMin       Int
+  durationMax       Int
+
+  primarySkill      String
+  secondarySkills   String[]
+
+  scenario          String
+  examplePrompt     String
+
+  tags              String[]
+
+  scoringWeights    Json     // flexible
+
+  createdAt         DateTime @default(now())
+
+  challenge         Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model WritingChallengeConfig {
+  id                String   @id @default(uuid())
+  challengeId       String   @unique
+
+  taskType          String   // email, letter, etc.
+
+  wordLimitMin      Int
+  wordLimitMax      Int
+
+  tone              String
+
+  primarySkill      String
+  secondarySkills   String[]
+
+  scenario          String
+  expectedStructure String[]
+
+  tags              String[]
+
+  scoringWeights    Json
+
+  createdAt         DateTime @default(now())
+
+  challenge         Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
